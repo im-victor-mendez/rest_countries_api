@@ -9,6 +9,10 @@
 .history
 .svn/
 migrate_working_dir/
+.env
+
+# VSCode related
+.vscode
 
 # IntelliJ related
 *.iml
