@@ -14,8 +14,10 @@ class Name {
   factory Name.fromMap(Map<String, dynamic> json) => Name(
         common: json["common"],
         official: json["official"],
-        nativeName: Map.from(json["nativeName"]!).map(
-            (k, v) => MapEntry<String, Translation>(k, Translation.fromMap(v))),
+        nativeName: json["nativeName"] == null
+            ? <String, Translation>{}
+            : Map.from(json["nativeName"]!).map((k, v) =>
+                MapEntry<String, Translation>(k, Translation.fromMap(v))),
       );
 
   Map<String, dynamic> toMap() => {

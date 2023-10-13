@@ -124,12 +124,14 @@ class RestCountriesCountry {
         altSpellings: List<String>.from(json["altSpellings"].map((x) => x)),
         region: regionValues.map[json["region"]]!,
         subregion: json["subregion"],
-        languages: Map.from(json["languages"]!)
-            .map((k, v) => MapEntry<String, String>(k, v)),
+        languages: json["languages"] == null
+            ? null
+            : Map.from(json["languages"]!)
+                .map((k, v) => MapEntry<String, String>(k, v)),
         translations: Map.from(json["translations"]).map(
             (k, v) => MapEntry<String, Translation>(k, Translation.fromMap(v))),
         latlng: List<double>.from(json["latlng"].map((x) => x?.toDouble())),
-        landlocked: json["landlocked"],
+        landlocked: json["landlocked"] ?? false,
         area: json["area"]?.toDouble(),
         demonyms: json["demonyms"] == null
             ? null
@@ -152,8 +154,10 @@ class RestCountriesCountry {
             ? []
             : List<String>.from(json["borders"]!.map((x) => x)),
         cioc: json["cioc"],
-        gini: Map.from(json["gini"]!)
-            .map((k, v) => MapEntry<String, double>(k, v?.toDouble())),
+        gini: json["gini"] == null
+            ? null
+            : Map.from(json["gini"]!)
+                .map((k, v) => MapEntry<String, double>(k, v?.toDouble())),
         fifa: json["fifa"],
       );
 
