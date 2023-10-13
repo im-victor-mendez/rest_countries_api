@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rest_countries_api/src/features/country/domain/entities/regions.dart';
 
 import '../widgets/toggle_dark_mode_button.dart';
 
@@ -20,20 +21,27 @@ class HomeScreen extends StatelessWidget {
       );
 }
 
-class _View extends StatelessWidget {
+class _View extends StatefulWidget {
   const _View();
 
   @override
+  State<_View> createState() => _ViewState();
+}
+
+class _ViewState extends State<_View> {
+  Regions? region;
+  @override
   Widget build(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
       child: Column(
         children: [
           // Top Layout
           Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              SizedBox(
+              const SizedBox(
                 width: 200,
                 // TODO: Implement search funcionality
                 child: TextField(
@@ -44,12 +52,25 @@ class _View extends StatelessWidget {
                   ),
                 ),
               ),
-              // TODO: Replace with toggle filter widget
-              Text('Filter by Region'),
+              SizedBox(
+                width: 200,
+                child: ExpansionTile(
+                  title: const Text('Filter by Region'),
+                  children: regionValues.entries
+                      .map((entry) => RadioListTile.adaptive(
+                            groupValue: region,
+                            onChanged: (value) =>
+                                setState(() => region = value),
+                            title: Text(entry.key),
+                            value: entry.value,
+                          ))
+                      .toList(),
+                ),
+              ),
             ],
           ),
           // Spacer
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           // Country list
         ],
       ),
