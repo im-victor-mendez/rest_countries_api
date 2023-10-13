@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../widgets/toggle_dark_mode_button.dart';
+
 class HomeScreen extends StatelessWidget {
   static const String name = 'Home';
   static const String path = '/';
@@ -10,16 +12,8 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
           title: const Text('Where in the world?'),
-          actions: [
-            TextButton.icon(
-              // TODO: Implement toggle functionality
-              onPressed: () {},
-              icon: const Icon(Icons.nightlight_rounded),
-              label: const Text('Dark Mode'),
-              style: const ButtonStyle(
-                foregroundColor: MaterialStatePropertyAll(Colors.white),
-              ),
-            ),
+          actions: const [
+            ToggleDarkModeButton(),
           ],
         ),
         body: const _View(),
