@@ -4,18 +4,18 @@
 
 // ignore_for_file: constant_identifier_names
 
-enum Status { OFFICIALLY_ASSIGNED, USER_ASSIGNED }
+enum RestCountriesStatus { OFFICIALLY_ASSIGNED, USER_ASSIGNED }
 
-final statusValues = EnumValues({
-  "officially-assigned": Status.OFFICIALLY_ASSIGNED,
-  "user-assigned": Status.USER_ASSIGNED
+final restCountriesStatusValues = RestCountriesEnumValues({
+  "officially-assigned": RestCountriesStatus.OFFICIALLY_ASSIGNED,
+  "user-assigned": RestCountriesStatus.USER_ASSIGNED
 });
 
-class EnumValues<T> {
+class RestCountriesEnumValues<T> {
   Map<String, T> map;
   late Map<T, String> reverseMap;
 
-  EnumValues(this.map);
+  RestCountriesEnumValues(this.map);
 
   Map<T, String> get reverse {
     reverseMap = map.map((k, v) => MapEntry(v, k));

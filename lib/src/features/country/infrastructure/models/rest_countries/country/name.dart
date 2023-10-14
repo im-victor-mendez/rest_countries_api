@@ -4,14 +4,19 @@
 
 import 'translation.dart';
 
-class Name {
+class RestCountriesName {
   final String common;
   final String official;
   final Map<String, Translation>? nativeName;
 
-  Name({required this.common, required this.official, this.nativeName});
+  RestCountriesName({
+    required this.common,
+    required this.official,
+    this.nativeName,
+  });
 
-  factory Name.fromMap(Map<String, dynamic> json) => Name(
+  factory RestCountriesName.fromMap(Map<String, dynamic> json) =>
+      RestCountriesName(
         common: json["common"],
         official: json["official"],
         nativeName: json["nativeName"] == null

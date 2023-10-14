@@ -8,7 +8,7 @@ import 'status.dart';
 
 enum StartOfWeek { MONDAY, SATURDAY, SUNDAY }
 
-final startOfWeekValues = EnumValues({
+final startOfWeekValues = RestCountriesEnumValues({
   "monday": StartOfWeek.MONDAY,
   "saturday": StartOfWeek.SATURDAY,
   "sunday": StartOfWeek.SUNDAY

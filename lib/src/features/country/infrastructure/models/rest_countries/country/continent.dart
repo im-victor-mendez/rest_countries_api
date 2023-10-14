@@ -16,7 +16,7 @@ enum Continent {
   SOUTH_AMERICA
 }
 
-final continentValues = EnumValues({
+final continentValues = RestCountriesEnumValues({
   "Africa": Continent.AFRICA,
   "Antarctica": Continent.ANTARCTICA,
   "Asia": Continent.ASIA,

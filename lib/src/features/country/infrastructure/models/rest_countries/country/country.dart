@@ -28,19 +28,19 @@ String restCountriesToMap(List<RestCountriesCountry> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toMap())));
 
 class RestCountriesCountry {
-  final Name name;
+  final RestCountriesName name;
   final List<String>? tld;
   final String cca2;
   final String? ccn3;
   final String cca3;
   final bool? independent;
-  final Status status;
+  final RestCountriesStatus status;
   final bool unMember;
   final Currencies? currencies;
   final Idd idd;
   final List<String>? capital;
   final List<String> altSpellings;
-  final Region region;
+  final RestCountriesRegion region;
   final String? subregion;
   final Map<String, String>? languages;
   final Map<String, Translation> translations;
@@ -54,7 +54,7 @@ class RestCountriesCountry {
   final Car car;
   final List<String> timezones;
   final List<Continent> continents;
-  final Flags flags;
+  final RestCountriesFlags flags;
   final CoatOfArms coatOfArms;
   final StartOfWeek startOfWeek;
   final CapitalInfo capitalInfo;
@@ -104,7 +104,7 @@ class RestCountriesCountry {
 
   factory RestCountriesCountry.fromMap(Map<String, dynamic> json) =>
       RestCountriesCountry(
-        name: Name.fromMap(json["name"]),
+        name: RestCountriesName.fromMap(json["name"]),
         tld: json["tld"] == null
             ? []
             : List<String>.from(json["tld"]!.map((x) => x)),
@@ -112,7 +112,7 @@ class RestCountriesCountry {
         ccn3: json["ccn3"],
         cca3: json["cca3"],
         independent: json["independent"],
-        status: statusValues.map[json["status"]]!,
+        status: restCountriesStatusValues.map[json["status"]]!,
         unMember: json["unMember"],
         currencies: json["currencies"] == null
             ? null
@@ -122,7 +122,7 @@ class RestCountriesCountry {
             ? []
             : List<String>.from(json["capital"]!.map((x) => x)),
         altSpellings: List<String>.from(json["altSpellings"].map((x) => x)),
-        region: regionValues.map[json["region"]]!,
+        region: restCountriesRegionValues.map[json["region"]]!,
         subregion: json["subregion"],
         languages: json["languages"] == null
             ? null
@@ -143,7 +143,7 @@ class RestCountriesCountry {
         timezones: List<String>.from(json["timezones"].map((x) => x)),
         continents: List<Continent>.from(
             json["continents"].map((x) => continentValues.map[x]!)),
-        flags: Flags.fromMap(json["flags"]),
+        flags: RestCountriesFlags.fromMap(json["flags"]),
         coatOfArms: CoatOfArms.fromMap(json["coatOfArms"]),
         startOfWeek: startOfWeekValues.map[json["startOfWeek"]]!,
         capitalInfo: CapitalInfo.fromMap(json["capitalInfo"]),
@@ -168,14 +168,14 @@ class RestCountriesCountry {
         "ccn3": ccn3,
         "cca3": cca3,
         "independent": independent,
-        "status": statusValues.reverse[status],
+        "status": restCountriesStatusValues.reverse[status],
         "unMember": unMember,
         "currencies": currencies?.toMap(),
         "idd": idd.toMap(),
         "capital":
             capital == null ? [] : List<dynamic>.from(capital!.map((x) => x)),
         "altSpellings": List<dynamic>.from(altSpellings.map((x) => x)),
-        "region": regionValues.reverse[region],
+        "region": restCountriesRegionValues.reverse[region],
         "subregion": subregion,
         "languages":
             Map.from(languages!).map((k, v) => MapEntry<String, dynamic>(k, v)),

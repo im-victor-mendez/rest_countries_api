@@ -8,4 +8,5 @@ import 'status.dart';
 
 enum Side { LEFT, RIGHT }
 
-final sideValues = EnumValues({"left": Side.LEFT, "right": Side.RIGHT});
+final sideValues =
+    RestCountriesEnumValues({"left": Side.LEFT, "right": Side.RIGHT});

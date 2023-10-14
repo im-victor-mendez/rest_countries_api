@@ -6,13 +6,13 @@
 
 import 'status.dart';
 
-enum Region { AFRICA, AMERICAS, ANTARCTIC, ASIA, EUROPE, OCEANIA }
+enum RestCountriesRegion { AFRICA, AMERICAS, ANTARCTIC, ASIA, EUROPE, OCEANIA }
 
-final regionValues = EnumValues({
-  "Africa": Region.AFRICA,
-  "Americas": Region.AMERICAS,
-  "Antarctic": Region.ANTARCTIC,
-  "Asia": Region.ASIA,
-  "Europe": Region.EUROPE,
-  "Oceania": Region.OCEANIA
+final restCountriesRegionValues = RestCountriesEnumValues({
+  "Africa": RestCountriesRegion.AFRICA,
+  "Americas": RestCountriesRegion.AMERICAS,
+  "Antarctic": RestCountriesRegion.ANTARCTIC,
+  "Asia": RestCountriesRegion.ASIA,
+  "Europe": RestCountriesRegion.EUROPE,
+  "Oceania": RestCountriesRegion.OCEANIA
 });

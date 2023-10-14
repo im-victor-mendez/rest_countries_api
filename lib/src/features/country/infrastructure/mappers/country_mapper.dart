@@ -1,12 +1,12 @@
 import '../../domain/entities/country.dart';
-import '../models/rest_countries/country/country_models.dart';
+import '../models/models.dart';
 
 class CountryMapper {
   static Country restCountriesCountryToEntity(RestCountriesCountry country) {
     final borderCountries = country.borders!.toList();
 
     final capital =
-        country.capital!.isEmpty ? 'No borders' : country.capital![0];
+        country.capital!.isEmpty ? 'No capital' : country.capital![0];
 
     final currencies = country.currencies == null
         ? ['No currencies']
@@ -39,6 +39,29 @@ class CountryMapper {
       region: country.region.name,
       subregion: country.subregion,
       topLevelDomain: topLevelDomain,
+    );
+  }
+
+  static Country projectCountryToEntity(ProjectCountry country) {
+    final borderCountries = country.borders!.toList();
+    final capital = country.capital ?? 'No capital';
+    final currencies =
+        country.currencies!.map((currency) => currency.toString()).toList();
+    final languages =
+        country.languages.map((language) => language.toString()).toList();
+
+    return Country(
+      borderCountries: borderCountries,
+      capital: capital,
+      currencies: currencies,
+      flagUrl: country.flags.png,
+      languages: languages,
+      name: country.name,
+      nativeName: country.nativeName,
+      population: country.population,
+      region: country.region.name,
+      subregion: country.subregion,
+      topLevelDomain: country.topLevelDomain,
     );
   }
 }
