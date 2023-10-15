@@ -2,6 +2,8 @@
 //
 //     final country = countryFromMap(jsonString);
 
+// ignore_for_file: constant_identifier_names
+
 import 'enum_values.dart';
 
 enum ProjectRegion {

@@ -58,6 +58,8 @@ class _ViewState extends ConsumerState<_View> {
                   ),
                 ),
               ),
+              // Filter by region
+              // TODO: Implement filter functionality
               SizedBox(
                 width: 200,
                 child: ExpansionTile(
