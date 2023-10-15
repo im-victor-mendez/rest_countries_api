@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../domain/entities/regions.dart';
+import '../../domain/entities/entities.dart';
 import '../providers/country_list_provider.dart';
 import '../widgets/widgets.dart';
 
@@ -32,11 +32,26 @@ class _View extends ConsumerStatefulWidget {
 
 class _ViewState extends ConsumerState<_View> {
   Regions? region;
+  List<Country> countryList = [];
+  List<Country> filteredCountryList = [];
+
+  final searchCountryController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+
+    ref.read(countryListNotifierProvider.notifier).getList();
+  }
+
   @override
   Widget build(BuildContext context) {
-    ref.read(countryListNotifierProvider.notifier).getList();
-
-    final countryList = ref.watch(countryListNotifierProvider);
+    if (countryList.isEmpty) {
+      setState(() {
+        countryList = ref.watch(countryListNotifierProvider);
+        filteredCountryList = countryList;
+      });
+    }
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
@@ -47,16 +62,10 @@ class _ViewState extends ConsumerState<_View> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const SizedBox(
-                width: 200,
-                // TODO: Implement search functionality
-                child: TextField(
-                  decoration: InputDecoration(
-                    hintText: 'Search for a country...',
-                    labelText: 'Country Name',
-                    prefixIcon: Icon(Icons.search_rounded),
-                  ),
-                ),
+              // Search country
+              _SearchCountryField(
+                controller: searchCountryController,
+                onChanged: searchCountry,
               ),
               // Filter by region
               // TODO: Implement filter functionality
@@ -89,13 +98,46 @@ class _ViewState extends ConsumerState<_View> {
                 mainAxisSpacing: 50,
               ),
               itemBuilder: (context, index) => CountryWidget(
-                country: countryList[index],
+                country: filteredCountryList[index],
                 spacing: 50,
               ),
-              itemCount: countryList.length,
+              itemCount: filteredCountryList.length,
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  void searchCountry(String value) =>
+      setState(() => filteredCountryList = countryList
+          .where((country) => value.isNotEmpty
+              ? country.name.toLowerCase().contains(value.toLowerCase())
+              : true)
+          .toList());
+}
+
+class _SearchCountryField extends StatelessWidget {
+  final TextEditingController controller;
+  final void Function(String)? onChanged;
+
+  const _SearchCountryField({
+    required this.controller,
+    required this.onChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 200,
+      child: TextField(
+        controller: controller,
+        decoration: const InputDecoration(
+          hintText: 'Search for a country...',
+          labelText: 'Country Name',
+          prefixIcon: Icon(Icons.search_rounded),
+        ),
+        onChanged: onChanged,
       ),
     );
   }

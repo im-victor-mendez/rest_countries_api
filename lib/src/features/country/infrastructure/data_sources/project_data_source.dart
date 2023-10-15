@@ -25,8 +25,5 @@ class ProjectDataSource extends CountryDataSource {
   }
 
   @override
-  Future<Country> getCountryByName(String name) {
-    // TODO: implement getCountryByName
-    throw UnimplementedError();
-  }
+  Future<Country> getCountryByName(String name) => throw UnimplementedError();
 }
