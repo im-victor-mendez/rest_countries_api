@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:rest_countries_api/src/features/country/domain/entities/regions.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../widgets/toggle_dark_mode_button.dart';
+import '../../domain/entities/regions.dart';
+import '../providers/country_list_provider.dart';
+import '../widgets/widgets.dart';
 
 class HomeScreen extends StatelessWidget {
   static const String name = 'Home';
@@ -21,17 +23,21 @@ class HomeScreen extends StatelessWidget {
       );
 }
 
-class _View extends StatefulWidget {
+class _View extends ConsumerStatefulWidget {
   const _View();
 
   @override
-  State<_View> createState() => _ViewState();
+  ConsumerState<_View> createState() => _ViewState();
 }
 
-class _ViewState extends State<_View> {
+class _ViewState extends ConsumerState<_View> {
   Regions? region;
   @override
   Widget build(BuildContext context) {
+    ref.read(countryListNotifierProvider.notifier).getList();
+
+    final countryList = ref.watch(countryListNotifierProvider);
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
       child: Column(
@@ -43,7 +49,7 @@ class _ViewState extends State<_View> {
             children: [
               const SizedBox(
                 width: 200,
-                // TODO: Implement search funcionality
+                // TODO: Implement search functionality
                 child: TextField(
                   decoration: InputDecoration(
                     hintText: 'Search for a country...',
@@ -72,6 +78,21 @@ class _ViewState extends State<_View> {
           // Spacer
           const SizedBox(height: 10),
           // Country list
+          Expanded(
+            child: GridView.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 4,
+                crossAxisSpacing: 50,
+                mainAxisExtent: 280,
+                mainAxisSpacing: 50,
+              ),
+              itemBuilder: (context, index) => CountryWidget(
+                country: countryList[index],
+                spacing: 50,
+              ),
+              itemCount: countryList.length,
+            ),
+          ),
         ],
       ),
     );
