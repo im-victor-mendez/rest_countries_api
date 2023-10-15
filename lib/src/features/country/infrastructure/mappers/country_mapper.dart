@@ -44,11 +44,17 @@ class CountryMapper {
 
   static Country projectCountryToEntity(ProjectCountry country) {
     final borderCountries = country.borders!.toList();
+
     final capital = country.capital ?? 'No capital';
+
     final currencies =
         country.currencies!.map((currency) => currency.toString()).toList();
+
     final languages =
         country.languages.map((language) => language.toString()).toList();
+
+    final region = country.region.name[0].toUpperCase() +
+        country.region.name.toLowerCase().substring(1);
 
     return Country(
       borderCountries: borderCountries,
@@ -59,7 +65,7 @@ class CountryMapper {
       name: country.name,
       nativeName: country.nativeName,
       population: country.population,
-      region: country.region.name,
+      region: region,
       subregion: country.subregion,
       topLevelDomain: country.topLevelDomain,
     );

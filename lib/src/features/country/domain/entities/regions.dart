@@ -7,3 +7,10 @@ final regionValues = {
   "Europe": Regions.europe,
   "Oceania": Regions.oceania
 };
+
+String? regionValueToKey(Regions value) {
+  for (final entry in regionValues.entries) {
+    if (entry.value == value) return entry.key;
+  }
+  return null;
+}
