@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:rest_countries_api/src/features/country/presentation/providers/theme_provider.dart';
 
 import '../../domain/entities/country.dart';
 import '../screens/screens.dart';
 
-class CountryWidget extends StatelessWidget {
+class CountryWidget extends ConsumerWidget {
   final Country country;
   final double spacing;
 
@@ -15,14 +17,16 @@ class CountryWidget extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final double width = (MediaQuery.of(context).size.width / 4) - spacing;
     const padding = EdgeInsets.symmetric(horizontal: 10);
     const style = TextStyle(fontSize: 16, fontWeight: FontWeight.bold);
 
-    const decoration = BoxDecoration(
-      borderRadius: BorderRadius.all(Radius.circular(5)),
-      color: Colors.grey,
+    final decoration = BoxDecoration(
+      borderRadius: const BorderRadius.all(Radius.circular(5)),
+      color: ref.watch(themeNotifierProvider).isDarkMode
+          ? Colors.blueGrey.shade800
+          : Colors.white12,
     );
 
     return GestureDetector(
@@ -30,37 +34,43 @@ class CountryWidget extends StatelessWidget {
         CountryScreen.name,
         pathParameters: {'countryName': country.name},
       ),
-      child: Container(
+      child: Material(
         clipBehavior: Clip.antiAlias,
-        decoration: decoration,
-        child: Wrap(
-          direction: Axis.vertical,
-          spacing: 10,
-          children: [
-            // Flag
-            Image.network(
-              country.flagUrl ?? '',
-              width: width,
-              height: 150,
-              fit: BoxFit.fill,
-            ),
-            // Name
-            Padding(padding: padding, child: Text(country.name, style: style)),
-            // Main info
-            Padding(
-              padding: padding,
-              child: Wrap(
-                crossAxisAlignment: WrapCrossAlignment.start,
-                direction: Axis.vertical,
-                spacing: 5,
-                children: [
-                  _MainInfo(title: 'Population', value: country.population),
-                  _MainInfo(title: 'Region', value: country.region),
-                  _MainInfo(title: 'Capital', value: country.capital),
-                ],
+        borderRadius: const BorderRadius.all(Radius.circular(5)),
+        elevation: 10,
+        child: Container(
+          clipBehavior: Clip.antiAlias,
+          decoration: decoration,
+          child: Wrap(
+            direction: Axis.vertical,
+            spacing: 10,
+            children: [
+              // Flag
+              Image.network(
+                country.flagUrl ?? '',
+                width: width,
+                height: 150,
+                fit: BoxFit.fill,
               ),
-            ),
-          ],
+              // Name
+              Padding(
+                  padding: padding, child: Text(country.name, style: style)),
+              // Main info
+              Padding(
+                padding: padding,
+                child: Wrap(
+                  crossAxisAlignment: WrapCrossAlignment.start,
+                  direction: Axis.vertical,
+                  spacing: 5,
+                  children: [
+                    _MainInfo(title: 'Population', value: country.population),
+                    _MainInfo(title: 'Region', value: country.region),
+                    _MainInfo(title: 'Capital', value: country.capital),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

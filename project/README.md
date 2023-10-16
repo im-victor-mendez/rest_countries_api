@@ -23,7 +23,7 @@ Your users should be able to:
 - [x] Filter countries by region
 - [x] Click on a country to see more detailed information on a separate page
 - [x] Click through to the border countries on the detail page
-- [ ] Toggle the color scheme between light and dark mode _(optional)_
+- [x] Toggle the color scheme between light and dark mode _(optional)_
 
 Want some support on the challenge? [Join our Slack community](https://www.frontendmentor.io/slack) and ask questions in the **#help** channel.
 

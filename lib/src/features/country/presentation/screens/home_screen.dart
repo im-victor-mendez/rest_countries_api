@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../domain/entities/entities.dart';
 import '../providers/country_list_provider.dart';
+import '../providers/theme_provider.dart';
 import '../widgets/widgets.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -82,7 +83,7 @@ class _ViewState extends ConsumerState<_View> {
             ],
           ),
           // Spacer
-          const SizedBox(height: 10),
+          const SizedBox(height: 40),
           _CountryList(filteredCountryList),
         ],
       ),
@@ -123,8 +124,9 @@ class _ViewState extends ConsumerState<_View> {
           }).toList());
 }
 
-class _SearchCountryField extends StatelessWidget {
+class _SearchCountryField extends ConsumerWidget {
   final TextEditingController controller;
+
   final void Function(String)? onChanged;
 
   const _SearchCountryField({
@@ -133,17 +135,34 @@ class _SearchCountryField extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 200,
-      child: TextField(
-        controller: controller,
-        decoration: const InputDecoration(
-          hintText: 'Search for a country...',
-          labelText: 'Country Name',
-          prefixIcon: Icon(Icons.search_rounded),
+  Widget build(BuildContext context, WidgetRef ref) {
+    final color = ref.watch(themeNotifierProvider).isDarkMode
+        ? Colors.blueGrey.shade800
+        : Colors.white12;
+
+    final decoration = InputDecoration(
+      border: InputBorder.none,
+      fillColor: color,
+      filled: true,
+      hintText: 'Search for a country...',
+      labelText: 'Country Name',
+      prefixIcon: const Padding(
+        padding: EdgeInsets.symmetric(horizontal: 20),
+        child: Icon(Icons.search_rounded),
+      ),
+    );
+
+    return Material(
+      borderRadius: const BorderRadius.all(Radius.circular(5)),
+      clipBehavior: Clip.antiAlias,
+      elevation: 10,
+      child: SizedBox(
+        width: 300,
+        child: TextField(
+          controller: controller,
+          decoration: decoration,
+          onChanged: onChanged,
         ),
-        onChanged: onChanged,
       ),
     );
   }
@@ -153,10 +172,7 @@ class _FilterByRegion extends StatelessWidget {
   final List<RadioListTile<Regions>> filters;
   final Text? subtitle;
 
-  const _FilterByRegion({
-    required this.filters,
-    required this.subtitle,
-  });
+  const _FilterByRegion({required this.filters, required this.subtitle});
 
   @override
   Widget build(BuildContext context) {
@@ -178,19 +194,23 @@ class _CountryList extends StatelessWidget {
   const _CountryList(this.list);
 
   @override
-  Widget build(BuildContext context) => Expanded(
-        child: GridView.builder(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 4,
-            crossAxisSpacing: 50,
-            mainAxisExtent: 280,
-            mainAxisSpacing: 50,
-          ),
-          itemBuilder: (context, index) => CountryWidget(
-            country: list[index],
-            spacing: 50,
-          ),
-          itemCount: list.length,
+  Widget build(BuildContext context) {
+    const gridDelegate = SliverGridDelegateWithFixedCrossAxisCount(
+      crossAxisCount: 4,
+      crossAxisSpacing: 50,
+      mainAxisExtent: 280,
+      mainAxisSpacing: 50,
+    );
+
+    return Expanded(
+      child: GridView.builder(
+        gridDelegate: gridDelegate,
+        itemBuilder: (context, index) => CountryWidget(
+          country: list[index],
+          spacing: 50,
         ),
-      );
+        itemCount: list.length,
+      ),
+    );
+  }
 }

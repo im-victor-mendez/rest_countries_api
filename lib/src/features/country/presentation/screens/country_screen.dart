@@ -6,6 +6,7 @@ import '../../domain/entities/entities.dart';
 import '../../infrastructure/data_sources/data_sources.dart';
 import '../../infrastructure/repositories_impl/country_repository_impl.dart';
 import '../providers/country_provider.dart';
+import '../providers/theme_provider.dart';
 import '../widgets/widgets.dart';
 
 class CountryScreen extends StatelessWidget {
@@ -52,6 +53,9 @@ class _ViewState extends ConsumerState<_View> {
   @override
   Widget build(BuildContext context) {
     setState(() => country = ref.watch(countryNotifierProvider));
+    final color = ref.watch(themeNotifierProvider).isDarkMode
+        ? Colors.grey.shade800
+        : Colors.white;
 
     return Padding(
       padding: const EdgeInsets.all(20),
@@ -59,12 +63,16 @@ class _ViewState extends ConsumerState<_View> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           TextButton.icon(
-            // TODO: Fix return to previous country
-            onPressed: () => GoRouter.of(context).pop(),
             icon: const Icon(Icons.arrow_back_rounded),
             label: const Text('Back'),
+            // TODO: Fix return to previous country
+            onPressed: () => GoRouter.of(context).pop(),
+            style: ButtonStyle(
+              backgroundColor: MaterialStatePropertyAll(color),
+              elevation: const MaterialStatePropertyAll(5),
+            ),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 50),
           _Country(country: country),
         ],
       ),
@@ -81,9 +89,11 @@ class _Country extends StatelessWidget {
   Widget build(BuildContext context) {
     final style = TextStyle(
       color: IconTheme.of(context).color,
-      fontWeight: FontWeight.bold,
       fontSize: 28,
+      fontWeight: FontWeight.bold,
     );
+
+    final borders = country.borderCountries;
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -97,7 +107,7 @@ class _Country extends StatelessWidget {
           children: [
             Text(country.name, style: style),
             _Info(country: country),
-            _BorderCountries(country: country),
+            _BorderCountries(borders),
           ],
         ),
       ],
@@ -112,6 +122,21 @@ class _Info extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final String? nativeName = country.nativeName;
+    final String population = country.population.toString();
+    final String region = country.region;
+    final String? subregion = country.subregion;
+    final String capital = country.capital;
+    final String topLevelDomain = country.topLevelDomain.isEmpty
+        ? 'No currencies'
+        : country.topLevelDomain.first;
+    final String currencies = country.currencies.length == 1
+        ? country.currencies.first
+        : country.currencies.map((e) => e).toList().join(', ');
+    final String languages = country.languages.length == 1
+        ? country.languages.first
+        : country.languages.map((e) => e).toList().join(', ');
+
     return SizedBox(
       height: 120,
       child: Wrap(
@@ -120,146 +145,49 @@ class _Info extends StatelessWidget {
         spacing: 10,
         children: [
           // Native Name
-          RichText(
-            text: TextSpan(
-              style: TextStyle(
-                color: IconTheme.of(context).color,
-                fontWeight: FontWeight.bold,
-              ),
-              text: 'Native Name',
-              children: [
-                const TextSpan(text: ': '),
-                TextSpan(
-                  style: const TextStyle(fontWeight: FontWeight.normal),
-                  text: country.nativeName,
-                ),
-              ],
-            ),
-          ),
+          _TextInfo(title: 'Native Name', value: nativeName),
           // Population
-          RichText(
-            text: TextSpan(
-              style: TextStyle(
-                color: IconTheme.of(context).color,
-                fontWeight: FontWeight.bold,
-              ),
-              text: 'Population',
-              children: [
-                const TextSpan(text: ': '),
-                TextSpan(
-                  style: const TextStyle(fontWeight: FontWeight.normal),
-                  text: country.population.toString(),
-                ),
-              ],
-            ),
-          ),
+          _TextInfo(title: 'Population', value: population),
           // Region
-          RichText(
-            text: TextSpan(
-              style: TextStyle(
-                color: IconTheme.of(context).color,
-                fontWeight: FontWeight.bold,
-              ),
-              text: 'Region',
-              children: [
-                const TextSpan(text: ': '),
-                TextSpan(
-                  style: const TextStyle(fontWeight: FontWeight.normal),
-                  text: country.region,
-                ),
-              ],
-            ),
-          ),
+          _TextInfo(title: 'Region', value: region),
           // Sub Region
-          RichText(
-            text: TextSpan(
-              style: TextStyle(
-                color: IconTheme.of(context).color,
-                fontWeight: FontWeight.bold,
-              ),
-              text: 'Sub Region',
-              children: [
-                const TextSpan(text: ': '),
-                TextSpan(
-                  style: const TextStyle(fontWeight: FontWeight.normal),
-                  text: country.subregion,
-                ),
-              ],
-            ),
-          ),
+          _TextInfo(title: 'Sub Region', value: subregion),
           // Capital
-          RichText(
-            text: TextSpan(
-              style: TextStyle(
-                color: IconTheme.of(context).color,
-                fontWeight: FontWeight.bold,
-              ),
-              text: 'Capital',
-              children: [
-                const TextSpan(text: ': '),
-                TextSpan(
-                  style: const TextStyle(fontWeight: FontWeight.normal),
-                  text: country.capital,
-                ),
-              ],
-            ),
-          ),
+          _TextInfo(title: 'Capital', value: capital),
           // Top Level Domain
-          RichText(
-            text: TextSpan(
-              style: TextStyle(
-                color: IconTheme.of(context).color,
-                fontWeight: FontWeight.bold,
-              ),
-              text: 'Top Level Domain',
-              children: [
-                const TextSpan(text: ': '),
-                TextSpan(
-                  style: const TextStyle(fontWeight: FontWeight.normal),
-                  text: country.topLevelDomain.isEmpty
-                      ? 'No currencies'
-                      : country.topLevelDomain.first,
-                ),
-              ],
-            ),
-          ),
+          _TextInfo(title: 'Top Level Domain', value: topLevelDomain),
           // Currencies
-          RichText(
-            text: TextSpan(
-              style: TextStyle(
-                color: IconTheme.of(context).color,
-                fontWeight: FontWeight.bold,
-              ),
-              text: 'Currencies',
-              children: [
-                const TextSpan(text: ': '),
-                TextSpan(
-                  style: const TextStyle(fontWeight: FontWeight.normal),
-                  text: country.currencies.length == 1
-                      ? country.currencies.first
-                      : country.currencies.map((e) => e).toList().join(', '),
-                ),
-              ],
-            ),
-          ),
+          _TextInfo(title: 'Currencies', value: currencies),
           // Languages
-          RichText(
-            text: TextSpan(
-              style: TextStyle(
-                color: IconTheme.of(context).color,
-                fontWeight: FontWeight.bold,
-              ),
-              text: 'Languages',
-              children: [
-                const TextSpan(text: ': '),
-                TextSpan(
-                  style: const TextStyle(fontWeight: FontWeight.normal),
-                  text: country.languages.length == 1
-                      ? country.languages.first
-                      : country.languages.map((e) => e).toList().join(', '),
-                ),
-              ],
-            ),
+          _TextInfo(title: 'Languages', value: languages),
+        ],
+      ),
+    );
+  }
+}
+
+class _TextInfo extends StatelessWidget {
+  final String title;
+  final String? value;
+
+  const _TextInfo({required this.title, required this.value});
+
+  @override
+  Widget build(BuildContext context) {
+    final style = TextStyle(
+      color: IconTheme.of(context).color,
+      fontWeight: FontWeight.bold,
+    );
+
+    return RichText(
+      text: TextSpan(
+        style: style,
+        text: title,
+        children: [
+          const TextSpan(text: ': '),
+          TextSpan(
+            style: const TextStyle(fontWeight: FontWeight.normal),
+            text: value,
           ),
         ],
       ),
@@ -268,38 +196,62 @@ class _Info extends StatelessWidget {
 }
 
 class _BorderCountries extends ConsumerWidget {
-  final Country country;
+  final List<String> borders;
 
-  const _BorderCountries({required this.country});
+  const _BorderCountries(this.borders);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final title =
+        borders.isEmpty ? 'Don\'t have border countries' : 'Border Countries:';
     return Wrap(
       spacing: 20,
       children: [
-        const Text(
-          'Border Countries:',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
+        Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
         Wrap(
           spacing: 10,
-          // TODO: Implement background color
-          children: country.borderCountries
-              .map((border) => GestureDetector(
-                    onTap: () async => GoRouter.of(context).pushNamed(
-                      CountryScreen.name,
-                      pathParameters: {
-                        'countryName':
-                            await CountryRepositoryImpl(ProjectDataSource())
-                                .getCountryByCode(border)
-                                .then((value) => value.name)
-                      },
-                    ),
-                    child: Text(border),
-                  ))
-              .toList(),
+          children: borders.map((border) => _BorderCountry(border)).toList(),
         ),
       ],
+    );
+  }
+}
+
+class _BorderCountry extends ConsumerWidget {
+  final String border;
+
+  const _BorderCountry(this.border);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    onTap() async => GoRouter.of(context).pushNamed(
+          CountryScreen.name,
+          pathParameters: {
+            'countryName': await CountryRepositoryImpl(ProjectDataSource())
+                .getCountryByCode(border)
+                .then((value) => value.name)
+          },
+        );
+
+    final color = ref.watch(themeNotifierProvider).isDarkMode
+        ? Colors.blueGrey.shade800
+        : Colors.white12;
+
+    const borderRadius = BorderRadius.all(Radius.circular(5));
+
+    final decoration = BoxDecoration(color: color, borderRadius: borderRadius);
+
+    return GestureDetector(
+      onTap: onTap,
+      child: Material(
+        borderRadius: borderRadius,
+        elevation: 5,
+        child: Container(
+          decoration: decoration,
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+          child: Text(border),
+        ),
+      ),
     );
   }
 }
