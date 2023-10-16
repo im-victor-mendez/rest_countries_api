@@ -56,4 +56,17 @@ class Translations {
         "it": it,
         "hu": hu,
       };
+
+  Translations.empty()
+      : br = '',
+        pt = '',
+        nl = '',
+        hr = '',
+        fa = '',
+        de = '',
+        es = '',
+        fr = '',
+        ja = '',
+        it = '',
+        hu = '';
 }

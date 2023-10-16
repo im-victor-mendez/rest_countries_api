@@ -26,6 +26,12 @@ class RESTCountriesDataSource extends CountryDataSource {
   }
 
   @override
+  Future<Country> getCountryByCode(String code) {
+    // TODO: implement getCountryByCode
+    throw UnimplementedError();
+  }
+
+  @override
   Future<Country> getCountryByName(String name) async {
     final uri = Uri.parse('${ConstantsApi.restCountries}/name/$name');
     final response = await http.get(uri);

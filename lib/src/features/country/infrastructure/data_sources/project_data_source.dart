@@ -25,6 +25,29 @@ class ProjectDataSource extends CountryDataSource {
   }
 
   @override
+  Future<Country> getCountryByCode(String code) async {
+    final response = await rootBundle.loadString('project/data.json');
+    final data = json.decode(response) as List;
+
+    final projectCountryList = data
+        .map((country) =>
+            ProjectCountry.fromMap(country as Map<String, dynamic>))
+        .toList();
+
+    final ProjectCountry projectCountry = projectCountryList.firstWhere(
+      (entry) =>
+          entry.alpha2Code == code ||
+          entry.alpha3Code == code ||
+          entry.altSpellings!.contains(code),
+      orElse: () => ProjectCountry.empty(),
+    );
+
+    final country = CountryMapper.projectCountryToEntity(projectCountry);
+
+    return country;
+  }
+
+  @override
   Future<Country> getCountryByName(String name) async =>
       await getAllCountries().then((value) => value.firstWhere(
             (country) => country.name.toLowerCase() == name.toLowerCase(),

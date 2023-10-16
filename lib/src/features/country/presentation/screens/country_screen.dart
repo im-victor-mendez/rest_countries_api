@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../domain/entities/entities.dart';
+import '../../infrastructure/data_sources/data_sources.dart';
+import '../../infrastructure/repositories_impl/country_repository_impl.dart';
 import '../providers/country_provider.dart';
 import '../widgets/widgets.dart';
 
@@ -57,6 +59,7 @@ class _ViewState extends ConsumerState<_View> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           TextButton.icon(
+            // TODO: Fix return to previous country
             onPressed: () => GoRouter.of(context).pop(),
             icon: const Icon(Icons.arrow_back_rounded),
             label: const Text('Back'),
@@ -96,31 +99,6 @@ class _Country extends StatelessWidget {
             _Info(country: country),
             _BorderCountries(country: country),
           ],
-        ),
-      ],
-    );
-  }
-}
-
-class _BorderCountries extends StatelessWidget {
-  final Country country;
-
-  const _BorderCountries({required this.country});
-
-  @override
-  Widget build(BuildContext context) {
-    return Wrap(
-      spacing: 20,
-      children: [
-        const Text(
-          'Border Countries:',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        Wrap(
-          spacing: 10,
-          // TODO: Implement background color
-          children:
-              country.borderCountries.map((country) => Text(country)).toList(),
         ),
       ],
     );
@@ -285,6 +263,43 @@ class _Info extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _BorderCountries extends ConsumerWidget {
+  final Country country;
+
+  const _BorderCountries({required this.country});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Wrap(
+      spacing: 20,
+      children: [
+        const Text(
+          'Border Countries:',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        Wrap(
+          spacing: 10,
+          // TODO: Implement background color
+          children: country.borderCountries
+              .map((border) => GestureDetector(
+                    onTap: () async => GoRouter.of(context).pushNamed(
+                      CountryScreen.name,
+                      pathParameters: {
+                        'countryName':
+                            await CountryRepositoryImpl(ProjectDataSource())
+                                .getCountryByCode(border)
+                                .then((value) => value.name)
+                      },
+                    ),
+                    child: Text(border),
+                  ))
+              .toList(),
+        ),
+      ],
     );
   }
 }

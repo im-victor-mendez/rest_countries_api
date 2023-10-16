@@ -12,6 +12,10 @@ class CountryRepositoryImpl implements CountryRepository {
       await dataSource.getAllCountries();
 
   @override
+  Future<Country> getCountryByCode(String code) async =>
+      await dataSource.getCountryByCode(code);
+
+  @override
   Future<Country> getCountryByName(String name) async =>
       await dataSource.getCountryByName(name);
 }

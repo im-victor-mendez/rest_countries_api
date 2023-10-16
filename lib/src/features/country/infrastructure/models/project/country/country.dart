@@ -153,4 +153,32 @@ class ProjectCountry {
         "independent": independent,
         "gini": gini,
       };
+
+  ProjectCountry.empty()
+      : name = '',
+        topLevelDomain = [],
+        alpha2Code = '',
+        alpha3Code = '',
+        callingCodes = [],
+        capital = '',
+        altSpellings = [],
+        subregion = '',
+        region = ProjectRegion.AFRICA,
+        population = 0,
+        latlng = [],
+        demonym = '',
+        area = 0,
+        timezones = [],
+        borders = [],
+        nativeName = '',
+        numericCode = '',
+        flags = ProjectFlags(svg: '', png: ''),
+        currencies = [],
+        languages = [],
+        translations = Translations.empty(),
+        flag = '',
+        regionalBlocs = [],
+        cioc = '',
+        independent = false,
+        gini = 0;
 }
