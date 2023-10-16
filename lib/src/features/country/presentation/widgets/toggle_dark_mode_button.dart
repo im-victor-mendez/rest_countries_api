@@ -8,11 +8,13 @@ class ToggleDarkModeButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final isDarkMode = ref.watch(themeNotifierProvider).isDarkMode;
+
     return TextButton.icon(
       onPressed: () =>
           ref.read(themeNotifierProvider.notifier).toggleDarkMode(),
-      icon: const Icon(Icons.nightlight_rounded),
-      label: const Text('Dark Mode'),
+      icon: Icon(isDarkMode ? Icons.nightlight_rounded : Icons.sunny),
+      label: Text(isDarkMode ? 'Dark Mode' : 'White Mode'),
       style: const ButtonStyle(
         foregroundColor: MaterialStatePropertyAll(Colors.white),
       ),
