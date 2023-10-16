@@ -47,11 +47,12 @@ class CountryMapper {
 
     final capital = country.capital ?? 'No capital';
 
-    final currencies =
-        country.currencies!.map((currency) => currency.toString()).toList();
+    final currencies = country.currencies!
+        .map((currency) => currency.name.toString())
+        .toList();
 
     final languages =
-        country.languages.map((language) => language.toString()).toList();
+        country.languages.map((language) => language.name.toString()).toList();
 
     final region = country.region.name[0].toUpperCase() +
         country.region.name.toLowerCase().substring(1);

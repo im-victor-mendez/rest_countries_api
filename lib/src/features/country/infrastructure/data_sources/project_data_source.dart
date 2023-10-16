@@ -13,11 +13,11 @@ class ProjectDataSource extends CountryDataSource {
     final response = await rootBundle.loadString('project/data.json');
     final data = json.decode(response) as List;
 
-    final restCountryList = data
+    final projectCountryList = data
         .map((country) =>
             ProjectCountry.fromMap(country as Map<String, dynamic>))
         .toList();
-    final countryList = restCountryList
+    final countryList = projectCountryList
         .map((country) => CountryMapper.projectCountryToEntity(country))
         .toList();
 
@@ -25,5 +25,10 @@ class ProjectDataSource extends CountryDataSource {
   }
 
   @override
-  Future<Country> getCountryByName(String name) => throw UnimplementedError();
+  Future<Country> getCountryByName(String name) async =>
+      await getAllCountries().then((value) => value.firstWhere(
+            (country) => country.name.toLowerCase() == name.toLowerCase(),
+            // TODO: Change to Country Error Not Founded
+            orElse: () => Country.empty(),
+          ));
 }

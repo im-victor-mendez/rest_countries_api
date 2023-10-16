@@ -45,4 +45,17 @@ class Country {
         'subregion': subregion,
         'topLevelDomain': topLevelDomain,
       };
+
+  Country.empty()
+      : flagUrl = null,
+        name = '',
+        population = 0,
+        region = '',
+        capital = '',
+        nativeName = null,
+        subregion = '',
+        topLevelDomain = [],
+        currencies = [],
+        languages = [],
+        borderCountries = [];
 }
