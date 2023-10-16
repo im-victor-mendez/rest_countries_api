@@ -8,6 +8,7 @@ import '../../infrastructure/repositories_impl/country_repository_impl.dart';
 import '../providers/country_provider.dart';
 import '../providers/theme_provider.dart';
 import '../widgets/widgets.dart';
+import 'home_screen.dart';
 
 class CountryScreen extends StatelessWidget {
   // TODO: To implement
@@ -66,7 +67,9 @@ class _ViewState extends ConsumerState<_View> {
             icon: const Icon(Icons.arrow_back_rounded),
             label: const Text('Back'),
             // TODO: Fix return to previous country
-            onPressed: () => GoRouter.of(context).pop(),
+            onPressed: () => GoRouter.of(context).canPop()
+                ? GoRouter.of(context).pop()
+                : GoRouter.of(context).replace(HomeScreen.path),
             style: ButtonStyle(
               backgroundColor: MaterialStatePropertyAll(color),
               elevation: const MaterialStatePropertyAll(5),
