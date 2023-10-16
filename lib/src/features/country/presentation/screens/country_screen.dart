@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../domain/entities/entities.dart';
 import '../providers/country_provider.dart';
@@ -56,7 +57,7 @@ class _ViewState extends ConsumerState<_View> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           TextButton.icon(
-            onPressed: () {},
+            onPressed: () => GoRouter.of(context).pop(),
             icon: const Icon(Icons.arrow_back_rounded),
             label: const Text('Back'),
           ),
@@ -245,7 +246,6 @@ class _Info extends StatelessWidget {
             ),
           ),
           // Currencies
-          // TODO: To fix mapper
           RichText(
             text: TextSpan(
               style: TextStyle(
@@ -265,7 +265,6 @@ class _Info extends StatelessWidget {
             ),
           ),
           // Languages
-          // TODO: To fix mapper
           RichText(
             text: TextSpan(
               style: TextStyle(

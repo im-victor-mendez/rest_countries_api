@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../domain/entities/country.dart';
+import '../screens/screens.dart';
 
 class CountryWidget extends StatelessWidget {
   final Country country;
@@ -23,37 +25,43 @@ class CountryWidget extends StatelessWidget {
       color: Colors.grey,
     );
 
-    return Container(
-      clipBehavior: Clip.antiAlias,
-      decoration: decoration,
-      child: Wrap(
-        direction: Axis.vertical,
-        spacing: 10,
-        children: [
-          // Flag
-          Image.network(
-            country.flagUrl ?? '',
-            width: width,
-            height: 150,
-            fit: BoxFit.fill,
-          ),
-          // Name
-          Padding(padding: padding, child: Text(country.name, style: style)),
-          // Main info
-          Padding(
-            padding: padding,
-            child: Wrap(
-              crossAxisAlignment: WrapCrossAlignment.start,
-              direction: Axis.vertical,
-              spacing: 5,
-              children: [
-                _MainInfo(title: 'Population', value: country.population),
-                _MainInfo(title: 'Region', value: country.region),
-                _MainInfo(title: 'Capital', value: country.capital),
-              ],
+    return GestureDetector(
+      onTap: () => GoRouter.of(context).pushNamed(
+        CountryScreen.name,
+        pathParameters: {'countryName': country.name},
+      ),
+      child: Container(
+        clipBehavior: Clip.antiAlias,
+        decoration: decoration,
+        child: Wrap(
+          direction: Axis.vertical,
+          spacing: 10,
+          children: [
+            // Flag
+            Image.network(
+              country.flagUrl ?? '',
+              width: width,
+              height: 150,
+              fit: BoxFit.fill,
             ),
-          ),
-        ],
+            // Name
+            Padding(padding: padding, child: Text(country.name, style: style)),
+            // Main info
+            Padding(
+              padding: padding,
+              child: Wrap(
+                crossAxisAlignment: WrapCrossAlignment.start,
+                direction: Axis.vertical,
+                spacing: 5,
+                children: [
+                  _MainInfo(title: 'Population', value: country.population),
+                  _MainInfo(title: 'Region', value: country.region),
+                  _MainInfo(title: 'Capital', value: country.capital),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
